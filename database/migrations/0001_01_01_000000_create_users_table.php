@@ -16,7 +16,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->char('telepon', 12);
             $table->string('password');
+            $table->double('latitude');
+            $table->double('longitude');
+            $table->float('jarak', precision: 5);
             $table->rememberToken();
             $table->timestamps();
         });
