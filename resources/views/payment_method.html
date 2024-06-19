@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Method</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #00CDFA;
+        }
+        .navbar-brand img {
+            height: 50px; /* Set the desired height */
+            width: auto;  /* Maintain aspect ratio */
+        }
+        .nav-item a {
+            color: black !important; /* Changed to black */
+        }
+        .container-fluid {
+            display: flex;
+            height: calc(100vh - 56px); /* Adjusting for navbar height */
+        }
+        .payment-methods {
+            flex: 1;
+            background-color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .payment-details {
+            flex: 1;
+            background-color: #0691DF;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .payment-methods h4, .payment-details h4 {
+            margin-bottom: 20px;
+        }
+        .btn-payment {
+            display: block;
+            width: 80%; /* Adjusted width */
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid black;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: black;
+            text-align: left;
+            background-color: white;
+        }
+        .btn-pay {
+            width: 100%;
+            max-width: 200px;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            background-color: black;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="#"><img src="/test/assets/logo.png" alt="Logo"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Cara Kerja</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Layanan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Lokasi</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Profil</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="payment-methods">
+            <h1>Metode Pembayaran</h1>
+            <p>Silahkan pilih metode pembayaran yang ingin anda gunakan</p>
+            <button class="btn-payment">MBanking</button>
+            <button class="btn-payment">E-Wallet</button>
+        </div>
+        <div class="payment-details">
+            <h4>Rincian Pembayaran:</h4>
+            <p>Total:</p>
+            <h2>Rp. 100.000</h2>
+            <button class="btn-pay">BAYAR</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
