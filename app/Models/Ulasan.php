@@ -14,6 +14,12 @@ class Ulasan extends Model
 
     public $timestamps = false;
 
+    protected $fillable = [
+        'pesanan_id',
+        'pesan',
+        'rating'
+    ];
+
     public function pesanan(): BelongsTo {
         return $this->belongsTo(Pesanan::class);
     }

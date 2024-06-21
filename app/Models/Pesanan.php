@@ -20,6 +20,16 @@ class Pesanan extends Model
 
     public $timestamps = false;
 
+    protected $fillable = [
+        'id',
+        'jenis_cucian_id',
+        'jumlah',
+        'status',
+        'dijemput',
+        'diantar',
+        'user_id'
+    ];
+
     public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
