@@ -3,7 +3,7 @@
 @section('style')
     <style>
         body {
-            background-image: url("/test/assets/Login.png");
+            background-image: url("/assets/Login.png");
             background-repeat: no-repeat;
             background-size: 100% 100%;
             /* position: relative; */
