@@ -30,7 +30,10 @@ Route::post('/payment/notification', [PaymentController::class, 'paymentNotifica
 
 Route::get('/admin/login', [AdminController::class, 'viewAdminLogin']);
 Route::get('/admin/detail', [AdminController::class, 'viewDetailAdmin']);
+Route::get('/admin/dashboard', [AdminController::class, 'viewAdminDashboard']);
+Route::get('/admin/user-detail-pesanan/{pesanan}', [AdminController::class, 'adminViewDetailPesanan']);
 
 Route::post('/admin/login', [AdminController::class, 'adminLoginHandling']);
 Route::post('/admin/update-data', [AdminController::class, 'adminUpdateHandling']);
+Route::post('/admin/update-status-pesanan/{pesanan}', [AdminController::class, 'updateStatusPesananHandling']);
 Route::post('/admin/logout', [AdminController::class, 'adminLogoutHandling']);

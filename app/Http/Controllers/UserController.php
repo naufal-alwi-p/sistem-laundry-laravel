@@ -48,10 +48,12 @@ class UserController extends Controller
         $user = Auth::user();
 
         $pesanan_aktif = $user->semuaPesanan()->where(function (Builder $query) {
-            $query->where('status', '<>', StatusPesanan::selesai)->orWhere('status', '<>', StatusPesanan::batal);
+            $query->where('status', '<>', StatusPesanan::selesai)->where('status', '<>', StatusPesanan::batal);
         })->get();
 
-        $riwayat_pesanan = $user->semuaPesanan()->where('status', StatusPesanan::selesai)->where('status', StatusPesanan::batal)->limit(5)->get();
+        $riwayat_pesanan = $user->semuaPesanan()->where(function (Builder $query) {
+            $query->where('status', StatusPesanan::selesai)->orWhere('status', StatusPesanan::batal);
+        })->limit(5)->get();
 
         $data = [
             'title' => 'Dashboard ' . $user->name . ' | Sparkling Laundry',

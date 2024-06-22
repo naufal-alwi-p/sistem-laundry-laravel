@@ -2,11 +2,40 @@
 
 @section('content')
     <div class="container">
+        @if (session('status') === true)
+            <div class="alert alert-success alert-dismissible mt-4 fade show" role="alert">
+                Status berhasil di update.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @elseif (session('status') === false)
+            <div class="alert alert-danger alert-dismissible mt-4 fade show" role="alert">
+                Status gagal di update.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <div class="card mt-5 mb-4 shadow">
             <div class="card-body">
                 <h1 class="card-title text-center">Detail Pesanan</h1>
 
-                <p class="fs-5 text-center"><b>Status:</b> {{ $pesanan->status }}</p>
+                @if ($pesanan->status === App\StatusPesanan::selesai->value || $pesanan->status === App\StatusPesanan::batal->value)
+                    <p class="fs-5 text-center"><b>Status:</b> {{ $pesanan->status }}</p>
+                @else
+                    <form action="/admin/update-status-pesanan/{{ $pesanan->id }}" method="post" id="update-status">
+                        @csrf
+                        <div class="fs-5 text-center">
+                            <label for="status" class="form-label"><b>Status:</b></label>
+                            <select name="status" id="status" class="form-select d-inline" style="width: fit-content;">
+                                <option @selected($pesanan->status === App\StatusPesanan::dijemput->value) value="{{ App\StatusPesanan::dijemput }}">{{ App\StatusPesanan::dijemput }}</option>
+                                <option @selected($pesanan->status === App\StatusPesanan::sampaiToko->value) value="{{ App\StatusPesanan::sampaiToko }}">{{ App\StatusPesanan::sampaiToko }}</option>
+                                <option @selected($pesanan->status === App\StatusPesanan::diproses->value) value="{{ App\StatusPesanan::diproses }}">{{ App\StatusPesanan::diproses }}</option>
+                                <option @selected($pesanan->status === App\StatusPesanan::packing->value) value="{{ App\StatusPesanan::packing }}">{{ App\StatusPesanan::packing }}</option>
+                                <option @selected($pesanan->status === App\StatusPesanan::kirimKeRumah->value) value="{{ App\StatusPesanan::kirimKeRumah }}">{{ App\StatusPesanan::kirimKeRumah }}</option>
+                                <option @selected($pesanan->status === App\StatusPesanan::selesai->value) value="{{ App\StatusPesanan::selesai }}">{{ App\StatusPesanan::selesai }}</option>
+                                <option @selected($pesanan->status === App\StatusPesanan::batal->value) value="{{ App\StatusPesanan::batal }}">{{ App\StatusPesanan::batal }}</option>
+                            </select>
+                        </div>
+                    </form>
+                @endif
 
                 <hr>
 
@@ -42,49 +71,14 @@
                     <p class="m-0">{{ explode(',', Illuminate\Support\Number::currency($pesanan->jumlah * $pesanan->jenisCucian->harga + ( $pesanan->dijemput === 1 ? $user->jarak * 5000 : 0 ) + ( $pesanan->diantar === 1 ? $user->jarak * 5000 : 0 ), 'IDR', 'id'))[0] }}</p>
                 </div>
 
+                @if ($pesanan->status !== App\StatusPesanan::selesai->value && $pesanan->status !== App\StatusPesanan::batal->value)
+                    <button type="submit" class="btn btn-dark" form="update-status">Update Status</button>
+                @endif
+
             </div>
         </div>
 
-        @if ($pesanan->status === App\StatusPesanan::selesai->value && $pesanan->ulasan === null)
-        {{-- @if (true) --}}
-            <div class="card mb-5 shadow">
-                <div class="card-body">
-                    <h2 class="card-title text-center">Penilaian Layanan</h2>
-
-                    <form action="/user/ulasan/{{ $pesanan->id }}" method="post">
-                        @csrf
-                        <div>
-                            <p class="fs-4 m-0 text-center">Rating</p>
-        
-                            <div style="width: fit-content;" class="mx-auto">
-                                <input type="radio" class="btn-check" name="rating" value="1" id="rating1" required>
-                                <label class="fs-3 self-star" for="rating1"><i class="bi bi-star-fill"></i></label>
-        
-                                <input type="radio" class="btn-check" name="rating" value="2" id="rating2" required>
-                                <label class="fs-3 self-star" for="rating2"><i class="bi bi-star-fill"></i></label>
-        
-                                <input type="radio" class="btn-check" name="rating" value="3" id="rating3" required>
-                                <label class="fs-3 self-star" for="rating3"><i class="bi bi-star-fill"></i></label>
-        
-                                <input type="radio" class="btn-check" name="rating" value="4" id="rating4" required>
-                                <label class="fs-3 self-star" for="rating4"><i class="bi bi-star-fill"></i></label>
-        
-                                <input type="radio" class="btn-check" name="rating" value="5" id="rating5" required>
-                                <label class="fs-3 self-star" for="rating5"><i class="bi bi-star-fill"></i></label>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="ulasan" class="form-label fs-5"><b>Ulasan:</b></label>
-                            <textarea name="pesan" id="ulasan" rows="5" class="form-control"></textarea>
-                        </div>
-
-                        <button type="submit" class="btn btn-dark ms-auto d-block px-5">Kirim</button>
-                    </form>
-                </div>
-            </div>
-        @elseif ($pesanan->status === App\StatusPesanan::selesai->value && $pesanan->ulasan !== null)
-        {{-- @elseif (true) --}}
+        @if ($pesanan->status === App\StatusPesanan::selesai->value && $pesanan->ulasan !== null)
             <div class="card mb-5 shadow">
                 <div class="card-body">
                     <h2 class="card-title text-center">Penilaian Layanan</h2>
@@ -105,6 +99,15 @@
                         <div class="mb-3">
                             <label for="ulasan" class="form-label fs-5"><b>Ulasan:</b></label>
                             <textarea name="pesan" id="ulasan" rows="5" class="form-control" style="resize: none;" readonly>{{ $pesanan->ulasan->pesan }}</textarea>
+                        </div>
+                </div>
+            </div>
+        @elseif ($pesanan->status === App\StatusPesanan::selesai->value && $pesanan->ulasan === null)
+            <div class="card mb-5 shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-center">Penilaian Layanan</h2>
+                        <div>
+                            <p class="text-secondary-emphasis text-center">Tidak ada ulasan</p>
                         </div>
                 </div>
             </div>

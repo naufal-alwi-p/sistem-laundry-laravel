@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pesanan;
+use App\StatusPesanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Database\Eloquent\Builder;
 
 class AdminController extends Controller
 {
@@ -24,6 +28,40 @@ class AdminController extends Controller
         $user = Auth::guard('admin')->user();
 
         return view('admin.detail', ['title' => 'Sparkling Laundry | Detail Admin' . $user->name, 'user' => $user]);
+    }
+
+    public function viewAdminDashboard() {
+        if (!Auth::guard('admin')->check()) {
+            return redirect('/');
+        }
+
+        $user = Auth::guard('admin')->user();
+
+        $pesanan_aktif = Pesanan::where('status', '<>', StatusPesanan::selesai)->where('status', '<>', StatusPesanan::batal)->get();
+
+        $riwayat_pesanan = Pesanan::where('status', StatusPesanan::selesai)->orWhere('status', StatusPesanan::batal)->limit(5)->get();
+
+        $data = [
+            'title' => 'Admin ' . $user->name . ' Dashboard | Sparkling Laundry',
+            'pesanan_aktif' => $pesanan_aktif,
+            'riwayat_pesanan' => $riwayat_pesanan
+        ];
+
+        return view('admin.dashboard', $data);
+    }
+
+    public function adminViewDetailPesanan(Pesanan $pesanan) {
+        if (!Auth::guard('admin')->check()) {
+            return redirect('/');
+        }
+
+        $data = [
+            'title' => 'Pesanan ' . $pesanan->id . ' | Sparkling Laundry',
+            'pesanan' => $pesanan,
+            'user' => $pesanan->user
+        ];
+
+        return view('admin.detail_pesanan', $data);
     }
 
     public function adminLoginHandling(Request $request) {
@@ -70,6 +108,26 @@ class AdminController extends Controller
         }
 
         return redirect('/admin/detail');
+    }
+
+    public function updateStatusPesananHandling(Request $request, Pesanan $pesanan) {
+        if (!Auth::guard('admin')->check()) {
+            return redirect('/');
+        }
+
+        $data = $request->validate([
+            'status' => ['required', Rule::enum(StatusPesanan::class)]
+        ]);
+
+        $pesanan->status = $data['status'];
+
+        if ($pesanan->save()) {
+            $request->session()->flash('status', true);
+        } else {
+            $request->session()->flash('status', false);
+        }
+
+        return redirect()->intended('/admin/user-detail-pesanan/' . $pesanan->id);
     }
 
     public function adminLogoutHandling(Request $request) {

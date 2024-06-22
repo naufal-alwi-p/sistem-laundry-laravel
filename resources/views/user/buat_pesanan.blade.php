@@ -33,7 +33,6 @@
                 <div class="col-auto">
                     <label for="jemput" class="form-label">Jasa Jemput:</label>
                     <select class="form-select @error('jemput') is-invalid @enderror" name="jemput" id="jemput">
-                        <option selected value="0">Tidak</option>
                         <option value="1">Ya</option>
                     </select>
                     @error('jemput')
